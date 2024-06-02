@@ -1,0 +1,14 @@
+{
+  "name": "friend-maker",
+  "version": "1.0.0",
+  "author": "Brian Cullinan <megamindbrian@gmail.com>",
+  "dependencies": {
+    "selenium-standalone": "^9.5.0",
+    "selenium-webdriver": "^4.21.0",
+    "webdriverio": "^8.38.0"
+  },
+  "scripts": {
+    "start": "npx selenium-standalone start",
+    "begin": "node linkedin-connections.js"
+  }
+}
