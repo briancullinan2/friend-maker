@@ -1,11 +1,8 @@
 var fs = require('fs');
-var path = require('path');
 const { WebDriver, Capabilities, Session } = require('selenium-webdriver')
 const _http = require('selenium-webdriver/http');
 const chrome = require('selenium-webdriver/chrome');
-
-var TOKEN_DIR = path.join(process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE, '.credentials');
-var SESSIONS_PATH = path.join(TOKEN_DIR, 'sessions.json');
+const {SESSIONS_PATH} = require('./config.js')
 
 var sessions = [];
 var sessionModified = 0;

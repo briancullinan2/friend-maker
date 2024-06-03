@@ -1,7 +1,9 @@
-
+const fs = require('fs')
 const getClient = require('./webdriver.js')
 const {getAllUntil} = require('./util-getall.js')
 const loginLinkedIn = require('./linkedin-auth.js')
+const {PROJECT_PATH} = require('./config.js')
+const { Builder, Browser, By, Key, until } = require('selenium-webdriver')
 
 async function listConnections(driver) {
   if(!driver) {
@@ -13,7 +15,7 @@ async function listConnections(driver) {
   let loggedIn = url.indexOf('mynetwork') > -1
   if(!loggedIn) {
     await driver.get('https://www.linkedin.com/mynetwork/')
-    await new Promise(resolve => setTimeout(resolve, 5000))
+    await new Promise(resolve => setTimeout(resolve, 4000))
   }
 
   let result = await getAllUntil(driver, 
@@ -24,7 +26,9 @@ async function listConnections(driver) {
     (i) => i < 10
   )
 
-  console.log(result)
+  fs.writeFileSync(
+    PROJECT_PATH + '/connections.json',
+    JSON.stringify(result, null, 4));
 
   return result.filter((l, i, arr) => arr.indexOf(l) === i)
 }

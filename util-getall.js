@@ -68,13 +68,25 @@ function evaluateDom(select, ctx, evaluate, query) {
 }
 
 
-function getAllXPath(select, ctx) {
+function execGetAllXPath(select, ctx) {
   var eval = ctx.evaluate || ctx.ownerDocument.evaluate;
   var query = ctx.querySelector.bind(ctx.ownerDocument)
       || ctx.ownerDocument.querySelector.bind(ctx.ownerDocument)
   return walkTree(select, ctx, (select, ctx) => {
       return evaluateDom(select, ctx, eval, query)
   })
+}
+
+
+async function getAllXPath(driver, select, ctx) {
+  return await driver.executeScript((
+    function main(evaluateDomString, walkTreeString, getAllXPathString, select, ctx) {
+      let evaluateDom = window.evaluateDom = eval('(' + evaluateDomString + ')')
+      let walkTree = window.walkTree = eval('(' + walkTreeString + ')')
+      let getAllXPath = window.getAllXPath = eval('(' + getAllXPathString + ')')
+      let result = getAllXPath(select, ctx || document)
+      return result;
+    }), evaluateDom, walkTree, execGetAllXPath, select, ctx)
 }
 
 
@@ -86,14 +98,7 @@ async function getAllUntil(driver, scrollableSelector,
                      up = false,
                      i = 0) {
   //let body = await driver.findElement(By.css('body'))
-  let result = await driver.executeScript((
-    function main(evaluateDomString, walkTreeString, getAllXPathString, dataSelector) {
-      let evaluateDom = window.evaluateDom = eval('(' + evaluateDomString + ')')
-      let walkTree = window.walkTree = eval('(' + walkTreeString + ')')
-      let getAllXPath = window.getAllXPath = eval('(' + getAllXPathString + ')')
-      let result = getAllXPath(dataSelector, document)
-      return result;
-    }), evaluateDom, walkTree, getAllXPath, dataSelector)
+  let result = await execGetAllXPath(driver, dataSelector)
   //let result = await driver.executeScript('return (function main() {\n return 1;\n})()')
 
   let newPosts = ((typeof result === 'string' ? [result] : result) || [])

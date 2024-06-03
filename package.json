@@ -9,6 +9,8 @@
   },
   "scripts": {
     "start": "npx selenium-standalone start",
-    "begin": "node linkedin-connections.js"
+    "post": "node linkedin-post.js",
+    "connect": "node linkedin-connect.js",
+    "login": "node linkedin-auth.js"
   }
 }
