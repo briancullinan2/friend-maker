@@ -59,7 +59,7 @@ async function getClient() {
   builder.setChromeOptions(options)
   let driver = builder.build()
   await updateOrAddSession((await driver.getSession()).getId())
-  let sessions = await getSessions(driver, true)
+  //let sessions = await getSessions(driver, true)
 
   let session = await driver.getSession()
   let original = session.getId()

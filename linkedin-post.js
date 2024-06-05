@@ -5,6 +5,7 @@ const { Builder, Browser, By, Key, until } = require('selenium-webdriver')
 const {PROJECT_PATH} = require('./config.js')
 const searchAll = require('./util-searchall.js')
 const loginLinkedIn = require('./linkedin-auth.js')
+const {getMessageResponse} = require('./openai-chat.js')
 
 async function linkedinPost(driver, query) {
   if(!driver) {
@@ -22,7 +23,7 @@ async function linkedinPost(driver, query) {
     .filter(search => posts.indexOf(search.link) == -1)
 
   await loginLinkedIn(driver)
-
+  let chat = await getMessageResponse(null, 'please write a social media post for this article and dont include the link ' + newPosts[0])
 
   let startButton
   try {
@@ -39,8 +40,11 @@ async function linkedinPost(driver, query) {
     messageBox = await driver.findElements(By.xpath('//*[@aria-multiline="true"]'))
   } catch (e) {}
   if(messageBox[0] && await messageBox[0].isDisplayed()) {
+
+    await messageBox[0].sendKeys(chat[chat.length-1].content + ' \n ')
+
     await messageBox[0].sendKeys(newPosts[0].link)
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise(resolve => setTimeout(resolve, 3000))
   }
 
 

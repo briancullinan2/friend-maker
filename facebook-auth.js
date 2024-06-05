@@ -3,24 +3,16 @@ const getClient = require('./webdriver.js')
 const getCredentials = require('./credentials.js')
 const { Builder, Browser, By, Key, until } = require('selenium-webdriver')
 
-async function enterLinkedIn(driver) {
-  console.log('LinkedIn: Sign in required');
+async function enterFacebook(driver) {
+  console.log('Facebook: Sign in required');
 
-  var credentials = getCredentials('linkedin.com')
-
-  let loginButton = await driver.findElement(By.css('a[href*="/login"]'))
-  if(!loginButton.error) {
-    try {
-      await loginButton.click()
-    } catch (e) {}
-    await new Promise(resolve => setTimeout(resolve, 2000))
-  }
+  var credentials = getCredentials('facebook.com')
 
   //let body = await driver.findElement(By.css('body'))
   await driver.wait(until.elementLocated(By.css('.login-form, [type="submit"]')), 10000);
   let submit = await driver.findElement(By.css('.login-form, [type="submit"]'))
 
-  let login = await driver.findElement(By.css('input[name*="session_key"]'))
+  let login = await driver.findElement(By.css('input[name*="email"]'))
   
   await driver.executeScript('arguments[0].click();', login)
   await driver.actions().sendKeys(credentials.username).perform()
@@ -30,9 +22,9 @@ async function enterLinkedIn(driver) {
   //await pass.sendKeys(credentials.username)
   //await driver.executeScript('arguments[0].value="' + credentials.username + '";', login)
   
-  console.log('LinkedIn: Require password')
+  console.log('Facebook: Require password')
 
-  let pass = await driver.findElement(By.css('input[name*="session_password"]'))
+  let pass = await driver.findElement(By.css('input[name*="pass"]'))
   await pass.click()
   await pass.sendKeys(credentials.password)
 
@@ -52,15 +44,10 @@ async function enterLinkedIn(driver) {
   }
 }
 
-async function loginLinkedIn(driver) {
+async function loginFacebook(driver) {
   if(!driver) {
     driver = await getClient();
   }
-
-  //if((await driver.alertText()).indexOf('leave') > -1) {
-  //  await driver.alertAccept()
-  //}
-  //await driver.pause(1000)
 
   let url = await driver.getCurrentUrl()
   let loggedIn = url.indexOf('linkedin') > -1 && url.indexOf('login') == -1
@@ -69,32 +56,30 @@ async function loginLinkedIn(driver) {
   if(loggedIn) {
     if(await driver.findElement(By.xpath('iframe.authentication-iframe'))) {
       await driver.frame((await driver.element('iframe.authentication-iframe')).value)
-      await enterLinkedIn()
+      await enterFacebook()
       await frame()
     }
   } else {
-    //await driver.executeScript('window.location="https://www.linkedin.com/"', [])
-    //await driver.url('https://www.linkedin.com/')
-    await driver.get('https://www.linkedin.com/')
+    await driver.get('https://www.facebook.com/')
     let loginLink, loginLink2
     try {
       loginLink = await driver.findElement(By.xpath('//a[text()[contains(.,"Forgot password?")]]'))
     } catch (e) {}
     try {
-      loginLink2 = await driver.findElement(By.xpath('//a[text()[contains(.,"Join now")]]'))
+      loginLink2 = await driver.findElement(By.xpath('//a[text()[contains(.,"Create new account")]]'))
     } catch (e) {}
     if(loginLink || loginLink2) {
-      await enterLinkedIn(driver)
+      await enterFacebook(driver)
     }
   }
 
   return driver
 }
 
-module.exports = loginLinkedIn
+module.exports = loginFacebook
 
 if(require.main === module && process.argv[1] == __filename) {
-  loginLinkedIn().then(client => {
+  loginFacebook().then(client => {
     console.log(client)
   })
 }

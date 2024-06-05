@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "author": "Brian Cullinan <megamindbrian@gmail.com>",
   "dependencies": {
+    "openai": "^4.47.3",
     "selenium-standalone": "^9.5.0",
     "selenium-webdriver": "^4.21.0",
     "webdriverio": "^8.38.0"
@@ -11,6 +12,14 @@
     "start": "npx selenium-standalone start",
     "post": "node linkedin-post.js",
     "connect": "node linkedin-connect.js",
-    "login": "node linkedin-auth.js"
+    "login": "node linkedin-auth.js",
+    "install": "npx selenium-standalone install",
+    "chat": "node openai-chat.js",
+    "facebook": "node facebook-auth.js",
+    "comment": "node linkedin-comment.js",
+    "friends": "node facebook-friends.js",
+    "facebook-connect": "node facebook-connect.js",
+    "photos": "node facebook-photos.js",
+    "like": "node facebook-like.js"
   }
 }
