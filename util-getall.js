@@ -101,11 +101,21 @@ async function getAllUntil(driver, scrollableSelector,
   let result = await getAllXPath(driver, dataSelector)
   //let result = await driver.executeScript('return (function main() {\n return 1;\n})()')
 
+  let filtered = []
   let newPosts = ((typeof result === 'string' ? [result] : result) || [])
-    .filter(e => set
-      .filter(m => compare(e, m)).length === 0);
-  set = newPosts.concat(set);
-  if(newPosts.length > 0 && await cb(i)) {
+  for(let i = 0; i < newPosts.length; i++) {
+    let found = false
+    for(let j = 0; j < set.length; j++) {
+      if(await compare(newPosts[i], set[j])) {
+        found = true
+      }
+    }
+    if(!found) {
+      filtered.push(newPosts[i])
+    }
+  }
+  set = set.concat(filtered);
+  if(filtered.length > 0 && await cb(i)) {
     await scrollClient(driver, scrollableSelector, up)
     await new Promise(resolve => setTimeout(resolve, 1500))
     await scrollClient(driver, scrollableSelector, up)

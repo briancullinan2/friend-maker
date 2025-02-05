@@ -20,6 +20,8 @@
     "friends": "node facebook-friends.js",
     "facebook-connect": "node facebook-connect.js",
     "photos": "node facebook-photos.js",
-    "like": "node facebook-like.js"
+    "like": "node facebook-like.js",
+    "posts": "node facebook-posts.js",
+    "quine": "node openai-quine.js"
   }
 }

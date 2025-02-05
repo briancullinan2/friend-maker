@@ -3,7 +3,7 @@ const {updateOrAddSession, getSessions, closeAllWindows} = require('./sessions.j
 const { Builder, Browser, By, Key, until } = require('selenium-webdriver')
 const chrome = require('selenium-webdriver/chrome');
 
-
+/*
 var webdriverServer = {
   services: ['selenium-standalone', 'chromedriver'],
   sync: false,
@@ -42,7 +42,7 @@ var webdriverServer = {
       }
   },
 };
-
+*/
 
 //console.log('deleting webdriver from cache');
 //Object.keys(require.cache).filter(k => k.includes('webdriver') || k.includes('wdio'))

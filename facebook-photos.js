@@ -19,13 +19,13 @@ async function listPhotos(driver, profile) {
   if(profile.indexOf('facebook.com') == -1) {
     profile = 'https://www.facebook.com' + profile
   }
-  
+
   let loggedIn = url.indexOf('photos') > -1
   if(!loggedIn) {
-    if(profile.indexOf('id=')) {
-      profile = profile + '&sk=photos'
+    if(profile.indexOf('id=') > -1) {
+      profile = profile + '&sk=photos_by'
     } else {
-      profile = profile + '/photos'
+      profile = profile + '/photos_by'
     }
 
     await driver.get(profile)
@@ -51,7 +51,7 @@ module.exports = listPhotos
 
 
 if(require.main === module && process.argv[1] == __filename) {
-  listPhotos(null, '/profile.php?id=100005902158184').then(result => {
+  listPhotos(null, '/ania.kaush').then(result => {
     console.log(result)
   })
 }
